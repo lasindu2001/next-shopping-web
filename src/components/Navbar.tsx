@@ -2,6 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 import Menu from './Menu'
 import Image from 'next/image'
+import SearchBar from './SearchBar'
+import NavIcons from './NavIcons'
 
 const Navbar = () => {
   return (
@@ -30,7 +32,10 @@ const Navbar = () => {
           </div>
         </div>
         {/* RIGHT */}
-        <div className="w-2/3 xl:w-1/2 flex items-center justify-between gap-8"></div>
+        <div className="w-2/3 xl:w-1/2 flex items-center justify-between gap-8">
+          <SearchBar/>
+          <NavIcons/>
+        </div>
       </div>
     </div>
   )
