@@ -30,7 +30,7 @@ const ProductList = () => {
                     <span className="font-semibold">$50</span>
                 </div>
                 <div className="text-sm text-gray-500">Description</div>
-                <button className="rounded-2xl ring-1 ring-red text-red w-max py-2 px-4 text-xs hover:bg-red hover:text-white">
+                <button className="rounded-2xl ring-1 ring-myred text-myred w-max py-2 px-4 text-xs hover:bg-myred hover:text-white">
                     Add to Cart
                 </button>
             </Link>
