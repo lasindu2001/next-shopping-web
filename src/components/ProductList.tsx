@@ -38,6 +38,16 @@ const ProductList = async ({
                 : 0
         );
 
+    if (searchParams?.sort) {
+        const [sortType, sortBy] = searchParams.sort.split(" ");
+        if (sortType === "asc") {
+            productQuery.ascending(sortBy);
+        }
+        if (sortType === "desc") {
+            productQuery.descending(sortBy);
+        }
+    }
+
     const res = await productQuery.find();
 
     return (
