@@ -7,25 +7,38 @@ import DOMPurify from 'isomorphic-dompurify';
 const PRODUCT_PER_PAGE = 20;
 
 const ProductList = async ({
-    categoryId, limit,
+    categoryId, limit, searchParams,
 }: {
     categoryId: string;
     limit?: number;
+    searchParams?: any;
 }) => {
     console.log("Received categoryId:", categoryId);
-    
     if (!categoryId) {
         console.error("categoryId is required but was not provided.");
-        return <div>Error: categoryId is required</div>;
+        return;
     }
 
     const wixClient = await wixClientServer();
 
-    const res = await wixClient.products
+    const productQuery = wixClient.products
         .queryProducts()
+        .startsWith("name", searchParams?.name || "")
         .eq("collectionIds", categoryId)
+        .hasSome(
+            "productType",
+            searchParams?.type ? [searchParams.type] : ["physical", "digital"]
+        )
+        .gt("priceData.price", searchParams?.min || 0)
+        .lt("priceData.price", searchParams?.max || 999999)
         .limit(limit || PRODUCT_PER_PAGE)
-        .find()
+        .skip(
+            searchParams?.page
+                ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE)
+                : 0
+        );
+
+    const res = await productQuery.find();
 
     return (
         <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
