@@ -5,16 +5,18 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import CartModal from "./CartModal";
+import { useWixClient } from "@/hooks/useWixClient";
 
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const wixClient = useWixClient();
   const router = useRouter();
   const pathName = usePathname();
 
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   const handleProfile = () => {
     if (!isLoggedIn) {
@@ -22,6 +24,19 @@ const NavIcons = () => {
     } else {
       setIsProfileOpen((prev) => !prev);
     }
+  };
+
+  // AUTH WITH WIX-MANAGED AUTH
+  const login = async () => {
+    const loginRequestData = wixClient.auth.generateOAuthData(
+      "http://localhost:3000"
+    );
+
+    console.log(loginRequestData);
+
+    localStorage.setItem("oAuthRedirectData", JSON.stringify(loginRequestData));
+    const { authUrl } = await wixClient.auth.getAuthUrl(loginRequestData);
+    window.location.href = authUrl;
   };
 
   const handleLogout = async () => {
@@ -35,7 +50,8 @@ const NavIcons = () => {
         width={22}
         height={22}
         className="cursor-pointer"
-        onClick={handleProfile}
+        // onClick={handleProfile}
+        onClick={login}
       />
       {isProfileOpen && (
         <div className="absolute p-4 rounded-md top-12 left-0 bg-white text-sm shadow-[0_3px_10px_rgb(0,0,0,0.2)] z-20">
@@ -56,17 +72,17 @@ const NavIcons = () => {
         className="relative cursor-pointer"
         onClick={() => setIsCartOpen((prev) => !prev)}
       >
-        <Image 
-          src="/cart.png" 
-          alt="" 
-          width={22} 
-          height={22} 
+        <Image
+          src="/cart.png"
+          alt=""
+          width={22}
+          height={22}
         />
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-myred rounded-full text-white text-sm flex items-center justify-center">
           5
         </div>
       </div>
-      {isCartOpen && <CartModal/>}
+      {isCartOpen && <CartModal />}
     </div>
   )
 }
