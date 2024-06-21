@@ -108,6 +108,10 @@ const LoginPage = () => {
           } else {
             setError("Something went wrong!");
           }
+        case LoginState.EMAIL_VERIFICATION_REQUIRED:
+          setMode(MODE.EMAIL_VERIFICATION);
+        case LoginState.OWNER_APPROVAL_REQUIRED:
+          setMessage("Your account is pending approval");
         default:
           break;
       }
