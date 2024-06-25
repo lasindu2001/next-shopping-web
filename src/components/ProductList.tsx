@@ -14,7 +14,6 @@ const ProductList = async ({
     limit?: number;
     searchParams?: any;
 }) => {
-    console.log("Received categoryId:", categoryId);
     if (!categoryId) {
         console.error("categoryId is required but was not provided.");
         return;
